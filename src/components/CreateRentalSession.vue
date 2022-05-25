@@ -1,63 +1,102 @@
 <template>
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <h3 class="text-center">Create Rental</h3>
-            <form @submit.prevent="handleSubmitForm">
-                <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" class="form-control" v-model="rental.name" required>
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" class="form-control" v-model="rental.email" required>
-                </div>
-                <div class="form-group">
-                    <label>Phone</label>
-                    <input type="text" class="form-control" v-model="rental.phone" required>
-                </div>
-                <div class="form-group">
-                    <label>Size</label>
-                    <input type="text" class="form-control" v-model="rental.size" required>
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-danger btn-block">Create</button>
-                </div>
-            </form>
+    <div class="container" style="max-width: 500px; text-align: left">
+        <div class="alert alert-success" role="alert">
+            <h2 class="alert-heading">Vue Form Validation Example</h2>
         </div>
+
+        <form @submit.prevent="submit">
+            <div class="form-group mb-3">
+                <label for="name">Name</label>
+                <input type="text" v-model="rental.name" id="name" name="name" class="form-control"
+                    :class="{ 'is-invalid': isSubmitted && v$.rental.name.$error }" />
+                <div v-if="isSubmitted && v$.rental.name.$error" class="invalid-feedback">
+                    Name field is required
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <label for="email">Email</label>
+                <input type="email" v-model="rental.email" id="email" name="email" class="form-control"
+                    :class="{ 'is-invalid': isSubmitted && v$.rental.email.$error }" />
+                <template v-if="isSubmitted && v$.rental.email.$error" class="invalid-feedback">
+                    <p v-for="error of v$.rental.email.$errors" :key="error.$uid" class="invalid-feedback">
+                        {{ error.$message }}
+                    </p>
+                </template>
+            </div>
+            <div class="form-group mb-3">
+                <label for="phone">Phone</label>
+                <input type="text" v-model="rental.phone" id="phone" name="phone" class="form-control"
+                    :class="{ 'is-invalid': isSubmitted && v$.rental.phone.$error }" />
+                <div v-if="isSubmitted && v$.rental.phone.$error" class="invalid-feedback">
+                    Please enter a valid phone number
+                </div>
+            </div>
+            <div class="form-group mb-3">
+                <button class="btn btn-primary btn-block"
+                    :class="{ 'btn-danger': isSubmitted && v$.$invalid }">
+                    Create
+                </button>
+            </div>
+        </form>
     </div>
 </template>
 
 <script>
+import { helpers } from '@vuelidate/validators'
+import useVuelidate from '@vuelidate/core'
+import { required, email, minLength } from '@vuelidate/validators'
+
+const phoneValidator = helpers.regex(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)
+
 export default {
-    name: 'CreateRentalSession',
-    data() {
+    setup: () => ({ v$: useVuelidate() }),
+    data: () => ({
+        isSubmitted: false,
+        rental: {
+            name: '',
+            phone: '',
+            email: '',
+        }
+    }),
+    validations() {
         return {
             rental: {
-                name: '',
-                email: '',
-                phone: '',
-                size: '',
+                name: { required },
+                phone: {
+                    minLength: minLength(7),
+                    required,
+                    phoneValidator,
+                },
+                email: { required, email },
             }
         }
     },
     methods: {
-    handleSubmitForm() {
-      let apiURL = "http://localhost:4000/api/create-rental";
-      axios
-        .post(apiURL, this.rental)
-        .then(() => {
-          this.$router.push("/view");
-          this.student = {
-            name: "",
-            email: "",
-            phone: "",
-            size: '',
-          };
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-  },
+        submit() {
+            this.isSubmitted = true;
+            this.v$.$validate();
+            if (this.v$.$invalid) {
+                return;
+            }
+            alert("SUCCESS!" + JSON.stringify(this.rental));
+        }
+    }
 }
 </script>
+<!-- handleSubmitForm() {
+            let apiURL = "http://localhost:4000/api/create-rental";
+            axios
+                .post(apiURL, this.rental)
+                .then(() => {
+                    this.$router.push("/view");
+                    this.rental = {
+                        name: "",
+                        email: "",
+                        phone: "",
+                        size: '',
+                    };
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }, -->

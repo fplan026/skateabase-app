@@ -1,11 +1,5 @@
-<!-- <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <TestComponent testContent="This is test content!"/>
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
-</template> -->
-
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
       <a class="navbar-brand" href="/">Skateabase</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
