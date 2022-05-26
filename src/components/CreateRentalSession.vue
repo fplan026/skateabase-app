@@ -1,10 +1,10 @@
 <template>
-    <div class="container" style="max-width: 500px; text-align: left">
-        <div class="alert alert-success" role="alert">
-            <h2 class="alert-heading">Vue Form Validation Example</h2>
-        </div>
-
+    <div class="container col-md-6" style="max-width: 500px; text-align: left">
+        <!-- Heading -->
+        <h2 class="alert-heading">New Rental Session</h2>
+        <!-- Begin form -->
         <form @submit.prevent="submit">
+            <!-- Name -->
             <div class="form-group mb-3">
                 <label for="name">Name</label>
                 <input type="text" v-model="rental.name" id="name" name="name" class="form-control"
@@ -13,6 +13,7 @@
                     Name field is required
                 </div>
             </div>
+            <!-- Email -->
             <div class="form-group mb-3">
                 <label for="email">Email</label>
                 <input type="email" v-model="rental.email" id="email" name="email" class="form-control"
@@ -32,8 +33,7 @@
                 </div>
             </div>
             <div class="form-group mb-3">
-                <button class="btn btn-primary btn-block"
-                    :class="{ 'btn-danger': isSubmitted && v$.$invalid }">
+                <button class="btn btn-primary btn-block" :class="{ 'btn-danger': isSubmitted && v$.$invalid }">
                     Create
                 </button>
             </div>
@@ -44,6 +44,7 @@
 <script>
 import { helpers } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core'
+import axios from 'axios'
 import { required, email, minLength } from '@vuelidate/validators'
 
 const phoneValidator = helpers.regex(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)
@@ -58,6 +59,7 @@ export default {
             email: '',
         }
     }),
+    // Validations for Vuelidate
     validations() {
         return {
             rental: {
@@ -79,11 +81,6 @@ export default {
                 return;
             }
             alert("SUCCESS!" + JSON.stringify(this.rental));
-        }
-    }
-}
-</script>
-<!-- handleSubmitForm() {
             let apiURL = "http://localhost:4000/api/create-rental";
             axios
                 .post(apiURL, this.rental)
@@ -93,10 +90,12 @@ export default {
                         name: "",
                         email: "",
                         phone: "",
-                        size: '',
                     };
                 })
                 .catch((error) => {
                     console.log(error);
                 });
-        }, -->
+        }
+    }
+}
+</script>

@@ -1,13 +1,64 @@
 <template>
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <h1>View</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="rental in Rentals" :key="rental._id">
+                        <td>{{ rental.name }}</td>
+                        <td>{{ rental.email }}</td>
+                        <td>{{ rental.phone }}</td>
+                        <td>
+                            <router-link :to="{name: 'edit', params: { id: rental._id }}" class="btn btn-success">Edit
+                            </router-link>
+                            <button @click.prevent="deleteRental(rental._id)" class="btn btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </template>
-
 <script>
-export default {
-    name: "ListRentalSession",
-}
+    import axios from "axios";
+    export default {
+        data() {
+            return {
+                Rentals: []
+            }
+        },
+        created() {
+            let apiURL = 'http://localhost:4000/api';
+            axios.get(apiURL).then(res => {
+                this.Rentals = res.data;
+            }).catch(error => {
+                console.log(error)
+            });
+        },
+        methods: {
+            deleteRental(id){
+                let apiURL = `http://localhost:4000/api/delete-rental/${id}`;
+                let indexOfArrayItem = this.Rentals.findIndex(i => i._id === id);
+                if (window.confirm("Do you really want to delete?")) {
+                    axios.delete(apiURL).then(() => {
+                        this.Rentals.splice(indexOfArrayItem, 1);
+                    }).catch(error => {
+                        console.log(error)
+                    });
+                }
+            }
+        }
+    }
 </script>
+<style>
+    .btn-success {
+        margin-right: 10px;
+    }
+</style>
