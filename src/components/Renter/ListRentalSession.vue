@@ -44,7 +44,7 @@
         },
         methods: {
             deleteRental(id){
-                let apiURL = `http://localhost:4000/api/delete-rental/${id}`;
+                let apiURL = `http://localhost:4000/api/delete-renter/${id}`;
                 let indexOfArrayItem = this.Rentals.findIndex(i => i._id === id);
                 if (window.confirm("Do you really want to delete?")) {
                     axios.delete(apiURL).then(() => {

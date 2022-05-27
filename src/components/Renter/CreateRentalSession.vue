@@ -81,7 +81,7 @@ export default {
                 return;
             }
             alert("SUCCESS!" + JSON.stringify(this.rental));
-            let apiURL = "http://localhost:4000/api/create-rental";
+            let apiURL = "http://localhost:4000/api/create-renter";
             axios
                 .post(apiURL, this.rental)
                 .then(() => {

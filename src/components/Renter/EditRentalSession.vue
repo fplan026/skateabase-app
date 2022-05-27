@@ -58,7 +58,7 @@ export default {
 	},
 	//get the rental session
 	created() {
-		let apiURL = `http://localhost:4000/api/edit-rental/${this.$route.params.id}`;
+		let apiURL = `http://localhost:4000/api/edit-renter/${this.$route.params.id}`;
 		axios.get(apiURL).then((res) => {
 			this.rental = res.data;
 		})
@@ -87,7 +87,7 @@ export default {
 			}
 
 			//data looks good, try to update the db 
-			let apiURL = `http://localhost:4000/api/update-rental/${this.$route.params.id}`;
+			let apiURL = `http://localhost:4000/api/update-renter/${this.$route.params.id}`;
 			axios.put(apiURL, this.rental).then((res) => {
 				console.log(res)
 				this.$router.push('/view')

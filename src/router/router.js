@@ -6,17 +6,17 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('../components/CreateRentalSession.vue')
+    component: () => import('../components/Renter/CreateRentalSession.vue')
   },
   {
     path: '/view',
     name: 'view',
-    component: () => import('../components/ListRentalSession.vue')
+    component: () => import('../components/Renter/ListRentalSession.vue')
   },
   {
     path: '/edit/:id',
     name: 'edit',
-    component: () => import('../components/EditRentalSession.vue')
+    component: () => import('../components/Renter/EditRentalSession.vue')
   }
 ]
 const router = createRouter({
