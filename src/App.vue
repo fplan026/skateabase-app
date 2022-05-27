@@ -25,14 +25,11 @@
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
-import TestComponent from './components/TestComponent.vue'
-import { router } from './router/router'
 
 export default {
   name: 'App',
   components: {
     HelloWorld,
-    TestComponent
   },
 }
 </script>

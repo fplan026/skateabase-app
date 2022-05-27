@@ -32,8 +32,11 @@
 					</div>
 				</div>
 				<div class="form-group mb-3">
-					<button class="btn btn-primary btn-block" :class="{ 'btn-danger': isSubmitted && v$.$invalid }">
+					<button class="m-2 btn btn-primary btn-block" :class="{ 'btn-danger': isSubmitted && v$.$invalid }">
 						Update
+					</button>
+					<button @click="back" class="m-2 btn btn-danger btn-block">
+						Cancel
 					</button>
 				</div>
 			</form>
@@ -77,6 +80,9 @@ export default {
 		}
 	},
 	methods: {
+		back() {
+            this.$router.go(-1);
+        },
 		handleUpdateForm() {
 			//validate the updated data
 			this.isSubmitted = true;

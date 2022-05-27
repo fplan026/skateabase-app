@@ -5,7 +5,43 @@ const skateExpressRoute = express.Router();
 // User schema
 let SkateSchema = require('../models/Skate');
 
-//get skates
+/**
+  * @swagger
+  * "/skates":
+  *   get:
+  *     tags: [Skate]
+  *     summary: "Get a list of all skates"
+  *     consumes: [application/json]
+  *     produces: [application/json]
+  *     responses:
+  *       200:
+  *         description: "OK"
+  *         schema:
+  *           type: object
+  *           properties:
+  *             success:
+  *               description: "성공 여부"
+  *               type: boolean
+  *               example: true
+  *       400:
+  *         description: "잘못된 매개변수"
+  *         schema:
+  *           type: object
+  *           properties:
+  *             success:
+  *               description: "성공 여부"
+  *               type: boolean
+  *               example: false
+  *       500:
+  *         description: "Internal server error"
+  *         schema:
+  *           type: object
+  *           properties:
+  *             success:
+  *               description: ""
+  *               type: boolean
+  *               example: false
+  */
 skateExpressRoute.route('/skates').get((req, res) => {
     SkateSchema.find((error, data) => {
         if (error) {
