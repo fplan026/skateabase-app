@@ -24,17 +24,24 @@
                     </p>
                 </template>
             </div>
+            <!-- Phone -->
             <div class="form-group mb-3">
                 <label for="phone">Phone</label>
-                <input type="text" v-model="rental.phone" id="phone" name="phone" class="form-control"
-                    :class="{ 'is-invalid': isSubmitted && v$.rental.phone.$error }" />
-                <div v-if="isSubmitted && v$.rental.phone.$error" class="invalid-feedback">
-                    Please enter a valid phone number
-                </div>
+                <MazPhoneNumberInput id="phone" show-code-on-list ref="phone" v-model="rental.phone" color="info"
+                    preferred- countries=" ['CA', 'US' ]" @update="results = $event"
+                    :error="isSubmitted && !results.isValid" />
+                <code>
+                    {{ results }}
+                </code>
             </div>
-            <div class="form-group mb-3">
-                <button class="btn btn-primary btn-block" :class="{ 'btn-danger': isSubmitted && v$.$invalid }">
+            <!-- Submit button -->
+            <div class="form-group mb-3 text-center">
+                <button class="m-2 btn btn-primary btn-block "
+                    :class="{ 'btn-danger': isSubmitted && (v$.$invalid || !this.results.isValid) }">
                     Create
+                </button>
+                <button class="m-2 btn btn-danger btn-block" @click="this.$router.go(-1)">
+                    Cancel
                 </button>
             </div>
         </form>
@@ -42,33 +49,41 @@
 </template>
 
 <script>
-import { helpers } from '@vuelidate/validators'
 import useVuelidate from '@vuelidate/core'
 import axios from 'axios'
-import { required, email, minLength } from '@vuelidate/validators'
+import { ref } from 'vue'
+import MazPhoneNumberInput from 'maz-ui/components/MazPhoneNumberInput'
+import AddSkateModalVue from '@/components/Skate/AddSkateModal.vue'
+import { required, email } from '@vuelidate/validators'
 
-const phoneValidator = helpers.regex(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)
+// const results = ref('results')
 
 export default {
-    setup: () => ({ v$: useVuelidate() }),
+    setup: () => ({
+        v$: useVuelidate(),
+    }),
     data: () => ({
         isSubmitted: false,
         rental: {
             name: '',
             phone: '',
             email: '',
+        },
+        results: {
+            value: ref('phone'),
+            isValid: false
         }
     }),
+    components: {
+        MazPhoneNumberInput,
+        AddSkateModalVue
+    },
     // Validations for Vuelidate
     validations() {
         return {
             rental: {
                 name: { required },
-                phone: {
-                    minLength: minLength(7),
-                    required,
-                    phoneValidator,
-                },
+                phone: { required },
                 email: { required, email },
             }
         }
@@ -77,10 +92,11 @@ export default {
         submit() {
             this.isSubmitted = true;
             this.v$.$validate();
-            if (this.v$.$invalid) {
+            if (this.v$.$invalid || !this.results.isValid) {
                 return;
             }
             alert("SUCCESS!" + JSON.stringify(this.rental));
+
             let apiURL = "http://localhost:4000/api/create-renter";
             axios
                 .post(apiURL, this.rental)

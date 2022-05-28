@@ -9,7 +9,15 @@ let skateSchema = new Schema({
         type: Boolean,
         default: false
     },
-    // renter: { type: Schema.Types.ObjectId, ref: 'Renter' },
+    status: {
+        type: String,
+        enum: ['AVAILABLE', 'RENTED', 'PENDING'],
+        default: 'AVAILABLE'
+    },
+    renter: { 
+        type: Schema.Types.ObjectId,
+        ref: 'Renter'
+    },
 }, {
     collection: 'skates'
 })
