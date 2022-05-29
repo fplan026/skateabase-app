@@ -56,8 +56,6 @@ import MazPhoneNumberInput from 'maz-ui/components/MazPhoneNumberInput'
 import AddSkateModalVue from '@/components/Skate/AddSkateModal.vue'
 import { required, email } from '@vuelidate/validators'
 
-// const results = ref('results')
-
 export default {
     setup: () => ({
         v$: useVuelidate(),
@@ -95,13 +93,14 @@ export default {
             if (this.v$.$invalid || !this.results.isValid) {
                 return;
             }
-            alert("SUCCESS!" + JSON.stringify(this.rental));
+            // alert("SUCCESS!" + JSON.stringify(this.rental));
 
             let apiURL = "http://localhost:4000/api/create-renter";
             axios
                 .post(apiURL, this.rental)
-                .then(() => {
-                    this.$router.push("/view");
+                .then((response) => {
+                    let id = response.data._id
+                    this.$router.push({ name: 'rent', params: { id } });
                     this.rental = {
                         name: "",
                         email: "",
